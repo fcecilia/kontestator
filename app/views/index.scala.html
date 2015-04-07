@@ -1,7 +1,35 @@
 @(message: String)
 
-@main("Kontestator") {
+    @main(message) {
 
-    @message
+        <h1>Kontestator</h1>
 
-}
+        <p>Little example of use of Akka persistence @@DevoxxFr</p>
+
+        <h2>User :</h2>
+
+        <ul>
+
+            <li>Create user</li>
+            <li>Get user</li>
+            <li> Modify user</li>
+            <li>Get users</li>
+        </ul>
+
+
+        <h2>Kontest :</h2>
+        <ul>
+            <li>Create kontests</li>
+            <li>Get kontest</li>
+            <li>Modify kontests</li>
+            <li>Get kontests</li>
+            <li>Get users</li>
+        </ul>
+        <h2>Participant :</h2>
+            <ul>
+                <li>Add participant</li>
+                <li>Get participants</li>
+                <li>Remove participants</li>
+                <li>Get users</li>
+            </ul>
+    }
