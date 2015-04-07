@@ -1,17 +1,16 @@
 package db
 
-import models.{Kontest, User}
+import models.{Kontest}
 
 /**
  * Created by fred on 07/04/15.
  */
 object MemoryProjection {
 
-  def users : List[User]= ???
-  def userById(id_user:String):Option[User] = ???
+
 
   def kontests : List[Kontest]= ???
-  def kontestById(id_kontest:String):Option[User] = ???
+  def kontestById(id_kontest:String):Option[Kontest] = ???
 
-  def participantsOfKontest(id_kontest:String):List[User] = ???
+  def participantsOfKontest(id_kontest:String):List[Kontest] = ???
 }

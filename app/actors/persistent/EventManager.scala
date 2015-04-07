@@ -28,13 +28,9 @@ object EventManager {
 
   /*COMMANDS*/
 
-  case class AddNewUser(id_user: String, name: String, mail: String)
+  case class AddNewKontest(id_user: String, id_kontest: String, title: String, description: String)
 
-  case class ModifyUser(id_user: String, name: String, mail: String)
-
-  case class AddNewKontest(id_user: String, id_kontest: String, name: String, mail: String)
-
-  case class ModifyKontest(id_user: String, id_kontest: String, name: String, mail: String)
+  case class ModifyKontest(id_user: String, id_kontest: String, title: String, description: String)
 
   case class AddParticipant(id_kontest: String, id_user: String)
 
@@ -42,10 +38,6 @@ object EventManager {
 
 
   /*EVENTS*/
-
-  case class NewUserAdded(id: String, name: String, mail: String, date: Date)
-
-  case class UserModified(id: String, name: String, mail: String, date: Date)
 
   case class KontestAdded(id: String, name: String, description: String, date: Date)
 
@@ -56,7 +48,7 @@ object EventManager {
   case class ParticipantRemove(id_kontest: String, id_user: String, date: Date)
 
 
-  lazy val system = ActorSystem("actors.persistent.EventManager")
+  lazy val system = ActorSystem("EventManager")
 
   lazy val persistentActor = system.actorOf(Props[EventManager], "EventManagerActor")
 

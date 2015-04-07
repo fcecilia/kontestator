@@ -34,8 +34,6 @@ object MongoProjection {
     def write(time: Date) = BSONDateTime(time.getTime)
   }
 
-  implicit val formatNewUserAdded = Macros.handler[NewUserAdded]
-  implicit val formatUserModified = Macros.handler[UserModified]
   implicit val formatKontestAdded = Macros.handler[KontestAdded]
   implicit val formatKontestModified = Macros.handler[KontestModified]
   implicit val formatParticipantAdded = Macros.handler[ParticipantAdded]

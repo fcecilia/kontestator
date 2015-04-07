@@ -19,53 +19,10 @@ object Application extends Controller {
     Ok(views.html.index("Kontestator"))
   }
 
-  case class FrontAddNewUser(name: String, mail: String)
-
-
-  /*USER*/
-
-
-  def new_user() = Action.async(BodyParsers.parse.json) { request =>
-    implicit val  format = Json.format[FrontAddNewUser]
-    val cmd = request.body.validate[FrontAddNewUser]
-    cmd.fold(
-      errors => {
-        Future(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors))))
-      },
-      front_cmd => {
-        val id_user = KontestHelper.generateUserID
-        val cmd = AddNewUser(id_user, front_cmd.name, front_cmd.mail)
-
-        (EventManager.persistentActor ? cmd).map { _ =>
-          Ok(Json.obj("status" -> "OK", "id" -> id_user))
-        }
-      }
-    )
-  }
-
-  def user_info(id_user: String) = play.mvc.Results.TODO
-
-  def modify_user(id_user: String) = Action.async(BodyParsers.parse.json) { request =>
-    implicit val  format = Json.format[ModifyUser]
-    val cmd = request.body.validate[ModifyUser]
-    cmd.fold(
-      errors => {
-        Future(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors))))
-      },
-      cmd => {
-        (EventManager.persistentActor ? cmd).map { _ =>
-          Ok(Json.obj("status" -> "OK", "id" -> id_user))
-        }
-      }
-    )
-  }
-
-
-  def users() = play.mvc.Results.TODO
 
   /*KONTEST*/
 
-  case class FrontAddNewKontest(id_user: String, name: String, mail: String)
+  case class FrontAddNewKontest(id_user: String, title: String, description: String)
 
 
 
@@ -79,7 +36,7 @@ object Application extends Controller {
       },
       front_cmd => {
         val id_kontest = KontestHelper.generateKontestID
-        val cmd = AddNewKontest(front_cmd.id_user, id_kontest, front_cmd.name, front_cmd.mail)
+        val cmd = AddNewKontest(front_cmd.id_user, id_kontest, front_cmd.title, front_cmd.description)
 
         (EventManager.persistentActor ? cmd).map { _ =>
           Ok(Json.obj("status" -> "OK", "id" -> id_kontest))
@@ -109,23 +66,6 @@ object Application extends Controller {
   def list_kontests() = play.mvc.Results.TODO
 
 
-  /*PARTICIPANT*/
 
-
-  def add_new_participant(id_kontest: String, id_user: String) = Action.async { request =>
-    val cmd = AddParticipant(id_kontest, id_user)
-    (EventManager.persistentActor ? cmd).map { _ =>
-      Ok(Json.obj("status" -> "OK", "id_user" -> cmd.id_user, "id_kontest" -> cmd.id_kontest))
-    }
-  }
-
-  def list_participants(id_kontest: String) = play.mvc.Results.TODO
-
-  def remove_participants(id_kontest: String, id_user: String) = Action.async { request =>
-    val cmd = RemoveParticipant(id_kontest, id_user)
-    (EventManager.persistentActor ? cmd).map { _ =>
-      Ok(Json.obj("status" -> "OK", "id_user" -> cmd.id_user, "id_kontest" -> cmd.id_kontest))
-    }
-  }
 
 }
