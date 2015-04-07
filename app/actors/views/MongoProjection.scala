@@ -36,10 +36,6 @@ object MongoProjection {
 
   implicit val formatKontestAdded = Macros.handler[KontestAdded]
   implicit val formatKontestModified = Macros.handler[KontestModified]
-  implicit val formatParticipantAdded = Macros.handler[ParticipantAdded]
-  implicit val formatParticipantRemove = Macros.handler[ParticipantRemove]
-
-
 
 
 

@@ -32,20 +32,15 @@ object EventManager {
 
   case class ModifyKontest(id_user: String, id_kontest: String, title: String, description: String)
 
-  case class AddParticipant(id_kontest: String, id_user: String)
-
-  case class RemoveParticipant(id_kontest: String, id_user: String)
 
 
   /*EVENTS*/
 
-  case class KontestAdded(id: String, name: String, description: String, date: Date)
+  case class KontestAdded(id_user: String, id_kontest: String, title: String, description: String, date: Date)
 
-  case class KontestModified(id: String, name: String, description: String, date: Date)
+  case class KontestModified(id: String,  id_kontest: String, title: String, description: String, date: Date)
 
-  case class ParticipantAdded(id_kontest: String, id_user: String, date: Date)
 
-  case class ParticipantRemove(id_kontest: String, id_user: String, date: Date)
 
 
   lazy val system = ActorSystem("EventManager")
