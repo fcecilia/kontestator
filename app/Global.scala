@@ -1,7 +1,9 @@
 import java.io.File
 
+import actors.persistent.EventManager
 import actors.views.{MongoProjection, CSVProjection}
-import play.api.GlobalSettings
+import akka.persistence.{Update, Recover}
+import play.api.{Logger, GlobalSettings}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
@@ -14,18 +16,29 @@ object Global extends GlobalSettings {
   override def onStart(app: play.api.Application): Unit = {
     super.onStart(app)
 
+
+    //REMOVE DB
+    MongoProjection.db.drop.map{ _ =>
+      MongoProjection.actor ! Recover()
+    }
+
+    //Recover
+    EventManager.persistentActor ! Recover()
+
+
     //REMOVE FILE
     val file = new File(CSVProjection.file_path)
     file.delete()
+    CSVProjection.actor ! Recover()
 
 
-    //REMOVE DB
-    //MongoProjection.db.drop()
+    Logger.info("<--------------------------START-------------------------->")
   }
 
   override def onStop(app: play.api.Application): Unit = {
+    EventManager.system.stop(EventManager.persistentActor)
+    EventManager.system.shutdown()
     super.onStop(app)
-
   }
 
 }

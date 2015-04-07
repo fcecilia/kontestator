@@ -4,8 +4,9 @@ import java.util.Date
 
 import actors.persistent.EventManager
 import actors.persistent.EventManager._
+import akka.actor.Props
 import akka.persistence.PersistentView
-import play.api.Play
+import play.api.{Logger, Play}
 import play.api.Play.current
 import reactivemongo.api.MongoDriver
 import reactivemongo.api.collections.default.BSONCollection
@@ -19,11 +20,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 class MongoProjection extends PersistentView {
 
+
   override def viewId: String = "MongoProjectionID"
 
   override def persistenceId: String = EventManager.persistenceId
 
-  override def receive: Receive = ???
+  override def receive: Receive = {
+
+    case KontestAdded(id_user, id_kontest, title, description, date) =>
+
+      Logger.info("TODO => MongoProjection")
+
+     /* import MongoProjection._
+      MongoProjection.collection("Kontest").insert(KontestAdded(id_user, id_kontest, title, description, date))*/
+
+  }
 }
 
 object MongoProjection {
@@ -38,17 +49,17 @@ object MongoProjection {
   implicit val formatKontestModified = Macros.handler[KontestModified]
 
 
-
-  lazy val db = {
+  implicit val db = {
     val host = Play.configuration.getString("mongo.url").getOrElse("")
     val port = Play.configuration.getString("mongo.port").getOrElse("")
     val user = Play.configuration.getString("mongo.user").getOrElse("")
     val pwd = Play.configuration.getString("mongo.pwd").getOrElse("")
     val dbName = Play.configuration.getString("mongo.db").getOrElse("")
+
     val credentials = List(Authenticate(dbName, user, pwd))
     val driver = new MongoDriver
-    val servers: Seq[String] = host.split(",").toSeq.map(s => s+":"+port)
-    val connection = driver.connection(servers,authentications = credentials)
+    val servers: Seq[String] = host.split(",").toSeq.map(s => s + ":" + port)
+    val connection = driver.connection(servers, authentications = credentials)
     connection(dbName)
   }
 
@@ -56,6 +67,9 @@ object MongoProjection {
     val collection: BSONCollection = db(collectionName)
     collection
   }
+
+  val actor = EventManager.system.actorOf(Props[MongoProjection], "MongoProjection")
+
 
 
 }

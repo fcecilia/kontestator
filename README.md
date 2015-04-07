@@ -7,7 +7,7 @@ Little example of use of Akka persistence @DevoxxFr
 
 Kontest :
 
-1. Create kontests
+1. Create kontest
 2. Get kontest
 3. Modify kontests
 4. Get kontests

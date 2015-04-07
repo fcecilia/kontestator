@@ -3,7 +3,10 @@ package actors.views
 import java.io.FileWriter
 
 import actors.persistent.EventManager
+import actors.persistent.EventManager.{KontestAdded, AddNewKontest}
+import akka.actor.Props
 import akka.persistence.PersistentView
+import play.api.Logger
 
 /**
  * Created by fred on 06/04/15.
@@ -16,15 +19,25 @@ class CSVProjection extends PersistentView {
 
   val file = new FileWriter(CSVProjection.file_path)
 
-  def add(data: List[String]) = {
-    data.foldRight("\n")(_ + "," + _)
+  def line(data: List[String]) = {
+    val line: String = data.foldRight("\n")(_ + ";" + _)
+    file.write(line)
     file.flush()
   }
 
-  override def receive: Receive = ???
+  override def receive: Receive = {
+
+    case KontestAdded(id_user, id_kontest, title, description, date) =>
+
+      Logger.info("TODO => CSVProjection")
+
+  }
 }
 
 object CSVProjection {
 
   val file_path = "rapport.csv"
+
+  val actor = EventManager.system.actorOf(Props[CSVProjection], "CSVProjection")
+
 }

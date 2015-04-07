@@ -8,10 +8,14 @@ import models.{Kontest}
  */
 object MemoryProjection {
 
-  var mapKontest: Map[String, Kontest] = ???
+  private var mapKontest: Map[String, Kontest] = Map.empty[String, Kontest]
 
-  def kontests: List[Kontest] = ???
+  def kontests: List[Kontest] = mapKontest.map(_._2).toList
 
-  def kontestById(id_kontest: String): Option[Kontest] = ???
+  def kontestById(id_kontest: String): Option[Kontest] = mapKontest.get(id_kontest)
+
+  def add(kontest: Kontest): Unit = {
+    mapKontest = mapKontest.filter(_._1 != kontest.id) + (kontest.id -> kontest)
+  }
 
 }
