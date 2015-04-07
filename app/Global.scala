@@ -20,7 +20,7 @@ object Global extends GlobalSettings {
 
 
     //REMOVE DB
-    MongoProjection.db.drop()
+    //MongoProjection.db.drop()
   }
 
   override def onStop(app: play.api.Application): Unit = {

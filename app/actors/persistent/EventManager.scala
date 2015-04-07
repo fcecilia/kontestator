@@ -47,10 +47,9 @@ object EventManager {
 
   case class UserModified(id: String, name: String, mail: String, date: Date)
 
+  case class KontestAdded(id: String, name: String, description: String, date: Date)
 
-  case class KontestAdded(id: String, name: String, mail: String, date: Date)
-
-  case class KontestModified(id: String, name: String, mail: String, date: Date)
+  case class KontestModified(id: String, name: String, description: String, date: Date)
 
   case class ParticipantAdded(id_kontest: String, id_user: String, date: Date)
 

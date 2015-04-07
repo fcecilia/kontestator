@@ -13,8 +13,6 @@ object Projection extends Controller {
 
   def csv() = Action {
 
-
-
     Ok.sendFile(new java.io.File(CSVProjection.file_path))
   }
 }

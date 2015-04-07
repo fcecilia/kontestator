@@ -23,6 +23,10 @@ object Application extends Controller {
 
 
   /*USER*/
+
+  def users() = play.mvc.Results.TODO
+
+
   def user_info(id_user: String) = play.mvc.Results.TODO
 
   def new_user() = Action.async(BodyParsers.parse.json) { request =>

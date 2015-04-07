@@ -31,7 +31,7 @@ object MongoProjection {
   implicit object BSONDateTimeHandler extends BSONHandler[BSONDateTime, Date] {
     def read(time: BSONDateTime) = new Date(time.value)
 
-    def write(jdtime: Date) = BSONDateTime(jdtime.getTime)
+    def write(time: Date) = BSONDateTime(time.getTime)
   }
 
   implicit val formatNewUserAdded = Macros.handler[NewUserAdded]

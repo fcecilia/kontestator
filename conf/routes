@@ -9,14 +9,15 @@ GET           /                                                      controllers
 GET           /assets/*file                                          controllers.Assets.at(path="/public", file)
 
 
+GET           /api/users                                             controllers.Application.users
 GET           /api/users/:id_user                                    controllers.Application.user_info(id_user)
-POST          /api/users                                             controllers.Application.new_user()
+POST          /api/users                                             controllers.Application.new_user
 PUT           /api/users/:id_user                                    controllers.Application.modify_user(id_user)
 
 
+GET           /api/kontests                                          controllers.Application.list_kontests
 GET           /api/kontests/:id_kontest                              controllers.Application.kontest_info(id_kontest)
-GET           /api/kontests                                          controllers.Application.list_kontests()
-POST          /api/kontests                                          controllers.Application.new_kontest()
+POST          /api/kontests                                          controllers.Application.new_kontest
 PUT           /api/kontests/:id_kontest                              controllers.Application.modify_kontest(id_kontest)
 
 
@@ -25,4 +26,4 @@ PUT           /api/kontests/:id_kontest/participants/:id_user        controllers
 DELETE        /api/kontests/:id_kontest/participants/:id_user        controllers.Application.remove_participants(id_kontest,id_user)
 
 
-GET         /api/rapport/rapport.csv  controllers.Projection.csv
+GET           /api/rapport/rapport.csv                               controllers.Projection.csv

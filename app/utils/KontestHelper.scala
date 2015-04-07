@@ -20,7 +20,7 @@ object KontestHelper {
       val randomNum = util.Random.nextInt(chars.length)
       sb.append(chars(randomNum))
     }
-    sb.toString
+    sb.toString()
   }
 
   private val format = new SimpleDateFormat("DHms")
