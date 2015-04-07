@@ -10,11 +10,11 @@ GET           /assets/*file                                          controllers
 
 
 #USER
-GET           /api/users                                             controllers.Application.users
 
 POST          /api/users                                             controllers.Application.new_user
-PUT           /api/users/:id_user                                    controllers.Application.modify_user(id_user)
 GET           /api/users/:id_user                                    controllers.Application.user_info(id_user)
+PUT           /api/users/:id_user                                    controllers.Application.modify_user(id_user)
+GET           /api/users                                             controllers.Application.users
 
 #KONTEST
 POST          /api/kontests                                          controllers.Application.new_kontest

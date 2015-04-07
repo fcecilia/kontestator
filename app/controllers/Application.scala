@@ -24,10 +24,6 @@ object Application extends Controller {
 
   /*USER*/
 
-  def users() = play.mvc.Results.TODO
-
-
-  def user_info(id_user: String) = play.mvc.Results.TODO
 
   def new_user() = Action.async(BodyParsers.parse.json) { request =>
     implicit val  format = Json.format[FrontAddNewUser]
@@ -47,6 +43,8 @@ object Application extends Controller {
     )
   }
 
+  def user_info(id_user: String) = play.mvc.Results.TODO
+
   def modify_user(id_user: String) = Action.async(BodyParsers.parse.json) { request =>
     implicit val  format = Json.format[ModifyUser]
     val cmd = request.body.validate[ModifyUser]
@@ -63,13 +61,13 @@ object Application extends Controller {
   }
 
 
+  def users() = play.mvc.Results.TODO
+
   /*KONTEST*/
 
   case class FrontAddNewKontest(id_user: String, name: String, mail: String)
 
-  def list_kontests() = play.mvc.Results.TODO
 
-  def kontest_info(id_kontest: String) = play.mvc.Results.TODO
 
   def new_kontest() = Action.async(BodyParsers.parse.json) { request =>
     implicit val  format = Json.format[FrontAddNewKontest]
@@ -90,6 +88,8 @@ object Application extends Controller {
     )
   }
 
+  def kontest_info(id_kontest: String) = play.mvc.Results.TODO
+
   def modify_kontest(id_kontest: String) = Action.async(BodyParsers.parse.json) { request =>
     implicit val  format = Json.format[ModifyKontest]
 
@@ -106,11 +106,11 @@ object Application extends Controller {
     )
   }
 
+  def list_kontests() = play.mvc.Results.TODO
+
 
   /*PARTICIPANT*/
 
-
-  def list_participants(id_kontest: String) = play.mvc.Results.TODO
 
   def add_new_participant(id_kontest: String, id_user: String) = Action.async { request =>
     val cmd = AddParticipant(id_kontest, id_user)
@@ -119,6 +119,7 @@ object Application extends Controller {
     }
   }
 
+  def list_participants(id_kontest: String) = play.mvc.Results.TODO
 
   def remove_participants(id_kontest: String, id_user: String) = Action.async { request =>
     val cmd = RemoveParticipant(id_kontest, id_user)
