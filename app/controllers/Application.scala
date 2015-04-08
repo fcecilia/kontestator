@@ -2,24 +2,24 @@ package controllers
 
 import java.util.Date
 
-import actors.persistent.EventManager
-import actors.persistent.EventManager._
+import actors.persistent.KontestEventManager
+import actors.persistent.KontestEventManager._
 import akka.pattern.ask
 import akka.util.Timeout
-import play.api.Logger
-import scala.collection.immutable.IndexedSeq
-import scala.concurrent.duration._
 import db.MemoryProjection
 import models.Kontest
+import play.api.Logger
 import play.api.libs.json.{Format, JsError, Json}
 import play.api.mvc._
 
+import scala.collection.immutable.IndexedSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
 object Application extends Controller {
 
-  implicit val timeout = Timeout(50 seconds)
+  implicit val timeout = Timeout(1 minutes)
 
   def index = Action {
     Ok(views.html.index("Kontestator"))
@@ -40,7 +40,7 @@ object Application extends Controller {
       front_cmd => {
         val cmd = AddNewKontest(front_cmd.id_user, front_cmd.title, front_cmd.description)
 
-        (EventManager.persistentActor ? cmd).mapTo[Option[String]].map {
+        (KontestEventManager.persistentActor ? cmd).mapTo[Option[String]].map {
           case Some(id_kontest) =>
 
             Ok(Json.obj("status" -> "OK", "id" -> id_kontest))
@@ -63,7 +63,7 @@ object Application extends Controller {
         Future(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors))))
       },
       cmd => {
-        (EventManager.persistentActor ? ModifyKontest(cmd.id_user, id_kontest, cmd.title, cmd.description)).map { _ =>
+        (KontestEventManager.persistentActor ? ModifyKontest(cmd.id_user, id_kontest, cmd.title, cmd.description)).map { _ =>
           Ok(Json.obj("status" -> "OK", "id" -> id_kontest))
         }
       }
@@ -74,7 +74,7 @@ object Application extends Controller {
 
     val kontests: List[Kontest] = MemoryProjection.kontests
     implicit val format: Format[Kontest] = Json.format[Kontest]
-    Ok(Json.obj("size" -> kontests.size,  "kontests" -> kontests))
+    Ok(Json.obj("size" -> kontests.size, "kontests" -> kontests))
 
   }
 
@@ -92,22 +92,22 @@ object Application extends Controller {
   }
 
 
-  def run(nbr: Int) = Action.async{
+  def run(nbr: Int) = Action.async {
     val begin = System.currentTimeMillis()
 
     if (nbr > 0) {
 
-      val responces: IndexedSeq[Future[Option[String]]] = (1 to nbr).map {
+      val reps: IndexedSeq[Future[Option[String]]] = (1 to nbr).map {
         n =>
 
           val description: Date = new Date()
           val cmd = AddNewKontest("fred", "title", description.toString)
 
-          (EventManager.persistentActor ? cmd).mapTo[Option[String]]
+          (KontestEventManager.persistentActor ? cmd).mapTo[Option[String]]
       }
-      Future.sequence(responces).map { _ =>
-        val time =System.currentTimeMillis() - begin
-        Logger.info("RUN ================================> "+time)
+      Future.sequence(reps).map { _ =>
+        val time = System.currentTimeMillis() - begin
+        Logger.info("RUN ================================> " + time)
         Ok(Json.obj("status" -> "OK", "time" -> time))
       }
 

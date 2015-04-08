@@ -2,8 +2,8 @@ package actors.views
 
 import java.util.Date
 
-import actors.persistent.EventManager
-import actors.persistent.EventManager._
+import actors.persistent.{KontestEventManager}
+import actors.persistent.KontestEventManager._
 import akka.actor.Props
 import akka.persistence.PersistentView
 import play.api.{Logger, Play}
@@ -23,15 +23,13 @@ class MongoProjection extends PersistentView {
 
   override def viewId: String = "MongoProjectionID"
 
-  override def persistenceId: String = EventManager.persistenceId
+  override def persistenceId: String = KontestEventManager.persistenceId
 
   override def receive: Receive = {
 
     case KontestAdded(id_user, id_kontest, title, description, date) =>
 
-     // Logger.info("TODO => MongoProjection")
-
-     /* import MongoProjection._
+      /*import MongoProjection._
       MongoProjection.collection("Kontest").insert(KontestAdded(id_user, id_kontest, title, description, date))*/
 
   }
@@ -68,7 +66,7 @@ object MongoProjection {
     collection
   }
 
-  val actor = EventManager.system.actorOf(Props[MongoProjection], "MongoProjection")
+  val actor = KontestEventManager.system.actorOf(Props[MongoProjection], "MongoProjection")
 
 
 

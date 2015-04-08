@@ -1,7 +1,7 @@
 import java.io.File
 import java.util.Date
 
-import actors.persistent.EventManager
+import actors.persistent.{KontestEventManager}
 import actors.views.{CSVProjection, MongoProjection}
 import akka.persistence.Recover
 import play.api.{GlobalSettings, Logger}
@@ -20,9 +20,9 @@ object Global extends GlobalSettings {
 
 
     //REMOVE DB
-    MongoProjection.db.drop.map { _ =>
+    /*MongoProjection.db.drop.map { _ =>
       MongoProjection.actor ! Recover()
-    }
+    }*/
     import akka.util.Timeout
 
     import scala.concurrent.duration._
@@ -32,7 +32,7 @@ object Global extends GlobalSettings {
 
     //Recover
     Logger.info("Recover ===========> " + new Date())
-    EventManager.persistentActor ! Recover()
+    KontestEventManager.persistentActor ! Recover()
 
 
     //REMOVE FILE
@@ -45,8 +45,8 @@ object Global extends GlobalSettings {
   }
 
   override def onStop(app: play.api.Application): Unit = {
-    EventManager.system.stop(EventManager.persistentActor)
-    EventManager.system.shutdown()
+    KontestEventManager.system.stop(KontestEventManager.persistentActor)
+    KontestEventManager.system.shutdown()
     super.onStop(app)
   }
 

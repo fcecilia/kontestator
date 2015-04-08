@@ -2,8 +2,8 @@ package actors.views
 
 import java.io.FileWriter
 
-import actors.persistent.EventManager
-import actors.persistent.EventManager.{KontestAdded, AddNewKontest}
+import actors.persistent.{KontestEventManager}
+import actors.persistent.KontestEventManager.{KontestAdded, AddNewKontest}
 import akka.actor.Props
 import akka.persistence.PersistentView
 import play.api.Logger
@@ -15,7 +15,7 @@ class CSVProjection extends PersistentView {
 
   override def viewId: String = "CSVProjectionID"
 
-  override def persistenceId: String = EventManager.persistenceId
+  override def persistenceId: String = KontestEventManager.persistenceId
 
   val file = new FileWriter(CSVProjection.file_path)
 
@@ -38,6 +38,6 @@ object CSVProjection {
 
   val file_path = "rapport.csv"
 
-  val actor = EventManager.system.actorOf(Props[CSVProjection], "CSVProjection")
+  val actor = KontestEventManager.system.actorOf(Props[CSVProjection], "CSVProjection")
 
 }
