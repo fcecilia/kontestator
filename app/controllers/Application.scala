@@ -74,7 +74,7 @@ object Application extends Controller {
 
     val kontests: List[Kontest] = MemoryProjection.kontests
     implicit val format: Format[Kontest] = Json.format[Kontest]
-    Ok(Json.obj("kontests" -> kontests))
+    Ok(Json.obj("size" -> kontests.size,  "kontests" -> kontests))
 
   }
 

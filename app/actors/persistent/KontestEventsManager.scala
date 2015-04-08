@@ -20,11 +20,16 @@ class EventManager extends PersistentActor {
 
   override def persistenceId: String = EventManager.persistenceId
 
+  val receiveRecoverTime = System.currentTimeMillis()
+  var nbrEventRecover = 0
+
   override def receiveRecover: Receive = {
 
-    case RecoveryCompleted => Logger.error("RecoveryCompleted"+ new Date())
+    case RecoveryCompleted => Logger.error("RecoveryCompleted =====> " + (System.currentTimeMillis() - receiveRecoverTime) + " : " + nbrEventRecover)
+
 
     case _ => Logger.info("TODO => EventManager - receiveRecover")
+      nbrEventRecover = nbrEventRecover + 1
 
   }
 
@@ -32,45 +37,45 @@ class EventManager extends PersistentActor {
 
     case AddNewKontest(id_user, title, description) =>
 
-    /*  Logger.info("TODO => EventManager - receiveCommand AddNewKontest")
+        Logger.info("TODO => EventManager - receiveCommand AddNewKontest")
 
-      sender() ! None*/
+        sender() ! None
 
-     if (users.contains(id_user)) {
-       val id_kontest = KontestHelper.generateKontestID
+      /*if (users.contains(id_user)) {
+        val id_kontest = KontestHelper.generateKontestID
 
-       val event: KontestAdded = KontestAdded(id_user, id_kontest, title, description, new Date())
+        val event: KontestAdded = KontestAdded(id_user, id_kontest, title, description, new Date())
 
-       persist(event) { evt =>
-         Logger.info(evt.toString)
-         MemoryProjection.add(Kontest(id_kontest,id_user,title, description))
-         sender() ! Some(id_kontest)
-       }
-     } else {
-       sender() ! None
+        persist(event) { evt =>
+          //Logger.info(evt.toString)
+          MemoryProjection.add(Kontest(id_kontest, id_user, title, description))
+          sender() ! Some(id_kontest)
+        }
+      } else {
+        sender() ! None
 
-     }
+      }*/
 
-    case ModifyKontest(id_user,id_kontest, title, description) =>
+    case ModifyKontest(id_user, id_kontest, title, description) =>
 
       Logger.info("TODO => EventManager - receiveCommand ModifyKontest")
 
       sender() ! None
 
-     /* val kontestOpt: Option[Kontest] = MemoryProjection.kontestById(id_kontest)
-     if (users.contains(id_user) && kontestOpt.nonEmpty) {
+    /* val kontestOpt: Option[Kontest] = MemoryProjection.kontestById(id_kontest)
+    if (users.contains(id_user) && kontestOpt.nonEmpty) {
 
-       val event: KontestModified = KontestModified(id_user, id_kontest, title, description, new Date())
+      val event: KontestModified = KontestModified(id_user, id_kontest, title, description, new Date())
 
-       persist(event) { evt =>
-         Logger.info(evt.toString)
-         MemoryProjection.add(Kontest(id_kontest,id_user,title, description))
-         sender() ! Some(id_kontest)
-       }
-     } else {
-       sender() ! None
+      persist(event) { evt =>
+        Logger.info(evt.toString)
+        MemoryProjection.add(Kontest(id_kontest,id_user,title, description))
+        sender() ! Some(id_kontest)
+      }
+    } else {
+      sender() ! None
 
-     }*/
+    }*/
   }
 }
 

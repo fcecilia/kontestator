@@ -29,7 +29,7 @@ class CSVProjection extends PersistentView {
 
     case KontestAdded(id_user, id_kontest, title, description, date) =>
 
-      Logger.info("TODO => CSVProjection")
+      //Logger.info("TODO => CSVProjection")
 
   }
 }
