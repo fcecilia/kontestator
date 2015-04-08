@@ -1,9 +1,14 @@
 package controllers
 
+import java.util.Date
+
 import actors.persistent.EventManager
 import actors.persistent.EventManager._
 import akka.pattern.ask
 import akka.util.Timeout
+import play.api.Logger
+import scala.collection.immutable.IndexedSeq
+import scala.concurrent.duration._
 import db.MemoryProjection
 import models.Kontest
 import play.api.libs.json.{Format, JsError, Json}
@@ -11,7 +16,6 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration._
 
 object Application extends Controller {
 
@@ -48,7 +52,7 @@ object Application extends Controller {
     )
   }
 
-  case class ModifyKontestFront(id_user: String,  title: String, description: String)
+  case class ModifyKontestFront(id_user: String, title: String, description: String)
 
   def modify_kontest(id_kontest: String) = Action.async(BodyParsers.parse.json) { request =>
     implicit val format = Json.format[ModifyKontestFront]
@@ -59,7 +63,7 @@ object Application extends Controller {
         Future(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors))))
       },
       cmd => {
-        (EventManager.persistentActor ? ModifyKontest(cmd.id_user,id_kontest,cmd.title,cmd.description)).map { _ =>
+        (EventManager.persistentActor ? ModifyKontest(cmd.id_user, id_kontest, cmd.title, cmd.description)).map { _ =>
           Ok(Json.obj("status" -> "OK", "id" -> id_kontest))
         }
       }
@@ -74,7 +78,7 @@ object Application extends Controller {
 
   }
 
-  def kontest_info(id_kontest: String) = Action{
+  def kontest_info(id_kontest: String) = Action {
 
     val kontestOpt: Option[Kontest] = MemoryProjection.kontestById(id_kontest)
     implicit val format: Format[Kontest] = Json.format[Kontest]
@@ -87,5 +91,30 @@ object Application extends Controller {
 
   }
 
+
+  def run(nbr: Int) = Action.async{
+    val begin = System.currentTimeMillis()
+
+    if (nbr > 0) {
+
+      val responces: IndexedSeq[Future[Option[String]]] = (1 to nbr).map {
+        n =>
+
+          val description: Date = new Date()
+          val cmd = AddNewKontest("fred", "title", description.toString)
+
+          (EventManager.persistentActor ? cmd).mapTo[Option[String]]
+      }
+      Future.sequence(responces).map { _ =>
+        val time =System.currentTimeMillis() - begin
+        Logger.info("RUN ================================> "+time)
+        Ok(Json.obj("status" -> "OK", "time" -> time))
+      }
+
+    } else {
+      Future(BadRequest(Json.obj("status" -> "KO", "message" -> "Seriously ?!")))
+
+    }
+  }
 
 }

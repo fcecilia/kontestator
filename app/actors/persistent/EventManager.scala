@@ -4,7 +4,7 @@ import java.util.Date
 
 import actors.persistent.EventManager._
 import akka.actor.{ActorSystem, Props}
-import akka.persistence.PersistentActor
+import akka.persistence.{RecoveryCompleted, PersistentActor}
 import db.MemoryProjection
 import models.Kontest
 import play.api.Logger
@@ -14,7 +14,7 @@ import utils.KontestHelper
  * Created by fred on 06/04/15.
  */
 class EventManager extends PersistentActor {
-
+  override def preStart() = ()
 
   var users: List[String] = List("fred")
 
@@ -22,7 +22,9 @@ class EventManager extends PersistentActor {
 
   override def receiveRecover: Receive = {
 
-    case e => Logger.info("TODO => EventManager - receiveRecover")
+    case RecoveryCompleted => Logger.error("RecoveryCompleted"+ new Date())
+
+    case _ => Logger.info("TODO => EventManager - receiveRecover")
 
   }
 
@@ -30,11 +32,11 @@ class EventManager extends PersistentActor {
 
     case AddNewKontest(id_user, title, description) =>
 
-      Logger.info("TODO => EventManager - receiveCommand AddNewKontest")
+    /*  Logger.info("TODO => EventManager - receiveCommand AddNewKontest")
 
-      sender() ! None
+      sender() ! None*/
 
-    /* if (users.contains(id_user)) {
+     if (users.contains(id_user)) {
        val id_kontest = KontestHelper.generateKontestID
 
        val event: KontestAdded = KontestAdded(id_user, id_kontest, title, description, new Date())
@@ -47,7 +49,7 @@ class EventManager extends PersistentActor {
      } else {
        sender() ! None
 
-     }*/
+     }
 
     case ModifyKontest(id_user,id_kontest, title, description) =>
 
