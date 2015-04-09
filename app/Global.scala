@@ -20,9 +20,9 @@ object Global extends GlobalSettings {
 
 
     //REMOVE DB
-    /*MongoProjection.db.drop.map { _ =>
+    MongoProjection.db.drop.map { _ =>
       MongoProjection.actor ! Recover()
-    }*/
+    }
     import akka.util.Timeout
 
     import scala.concurrent.duration._

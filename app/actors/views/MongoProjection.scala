@@ -29,7 +29,7 @@ class MongoProjection extends PersistentView {
 
     case KontestAdded(id_user, id_kontest, title, description, date) =>
 
-      /*import MongoProjection._
+     /* import MongoProjection._
       MongoProjection.collection("Kontest").insert(KontestAdded(id_user, id_kontest, title, description, date))*/
 
   }

@@ -27,14 +27,12 @@ class KontestEventManager extends PersistentActor {
     case RecoveryCompleted => Logger.error("RecoveryCompleted =====> " + (System.currentTimeMillis() - receiveRecoverTime))
 
     case KontestAdded(id_user: String, id_kontest: String, title: String, description: String, date: Date) =>
-      MemoryProjection.add(Kontest(id_kontest, id_user, title, description))
 
-      Logger.info("TODO => EventManager - receiveRecover AddNewKontest")
+    //"TODO => EventManager - receiveRecover KontestAdded
 
     case ModifyKontest(id_user, id_kontest, title, description) =>
-      Logger.info("TODO => EventManager - receiveRecover AddNewKontest")
+    //TODO => EventManager - receiveRecover ModifyKontest
 
-    case _ => Logger.info("TODO => o.O")
 
   }
 
@@ -42,44 +40,17 @@ class KontestEventManager extends PersistentActor {
 
     case AddNewKontest(id_user, title, description) =>
 
-      Logger.info("TODO => EventManager - receiveCommand AddNewKontest")
+      //TODO => EventManager - receiveCommand AddNewKontest
 
       sender() ! None
 
-     if (users.contains(id_user)) {
-       val id_kontest = KontestHelper.generateKontestID
-
-       val event: KontestAdded = KontestAdded(id_user, id_kontest, title, description, new Date())
-
-       persist(event) { evt =>
-         MemoryProjection.add(Kontest(id_kontest, id_user, title, description))
-         sender() ! Some(id_kontest)
-       }
-     } else {
-       sender() ! None
-
-     }
 
     case ModifyKontest(id_user, id_kontest, title, description) =>
 
-      Logger.info("TODO => EventManager - receiveCommand ModifyKontest")
+      //TODO => EventManager - receiveCommand ModifyKontest
 
       sender() ! None
 
-    /* val kontestOpt: Option[Kontest] = MemoryProjection.kontestById(id_kontest)
-    if (users.contains(id_user) && kontestOpt.nonEmpty) {
-
-      val event: KontestModified = KontestModified(id_user, id_kontest, title, description, new Date())
-
-      persist(event) { evt =>
-        Logger.info(evt.toString)
-        MemoryProjection.add(Kontest(id_kontest,id_user,title, description))
-        sender() ! Some(id_kontest)
-      }
-    } else {
-      sender() ! None
-
-    }*/
   }
 }
 
